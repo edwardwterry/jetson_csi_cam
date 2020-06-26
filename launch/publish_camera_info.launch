@@ -1,0 +1,12 @@
+<launch>
+<node name="camera_info" pkg="rostopic" type="rostopic"
+  args="pub camera_info sensor_msgs/CameraInfo
+ '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'camera'},
+  height: 1080, width: 1920, distortion_model: 'plumb_bob',
+  D: [-0.3310039966953204, 0.1140168515457489, -0.0001779457999740423, 0.0004901051625102625, 0],
+  K: [1363.546136549349, 0, 973.1252445340901, 0, 1361.628688713712, 540.76902357218, 0, 0, 1],
+  R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+  P: [1114.409545898438, 0, 980.6387472380375, 0, 0, 1287.045532226562, 540.7189016946322, 0, 0, 0, 1, 0],
+  binning_x: 0, binning_y: 0,
+  roi: {x_offset: 0, y_offset: 0, height: 1080, width: 1920, do_rectify: false}}'"/>
+</launch>

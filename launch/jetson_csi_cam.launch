@@ -20,7 +20,7 @@
     nvvidconv flip-method=2 ! video/x-raw, format=(string)BGRx ! videoconvert"/>
 
   <!-- Start the GSCAM node -->
-  <node ns="color" pkg="gscam" type="gscam" name="$(arg cam_name)">
+  <node ns="color" pkg="gscam" type="gscam" name="$(arg cam_name)" respawn="true">
     <param name="camera_name" value="$(arg cam_name)" />
     <param name="frame_id" value="$(arg frame_id)" />
     <param name="sync_sink" value="$(arg sync_sink)" />
