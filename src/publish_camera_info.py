@@ -1,25 +1,26 @@
 #!/usr/bin/env python
 import rospy
-import cv2
 from sensor_msgs.msg import Image, CameraInfo
-from cv_bridge import CvBridge
 import yaml
-import numpy as np
 
 calibration_file = '/home/ed/.ros/camera_info/camera.yaml'
 with open(calibration_file, 'r') as f:
     data = yaml.safe_load(f)
 
-br = CvBridge()
-
 def callback(msg):
-    camera_matrix = np.array(data['camera_matrix']['data']).reshape([3,3])
-    distortion_coeffs = np.array(data['distortion_coefficients']['data'])
-    im = cv2.undistort(br.imgmsg_to_cv2(msg), camera_matrix, distortion_coeffs)
-    image_pub.publish(br.cv2_to_imgmsg(im, encoding='rgb8'))
+    info = CameraInfo()
+    info.header = msg.header
+    info.height = data['image_height']
+    info.width = data['image_width']
+    info.distortion_model = data['distortion_model']
+    info.D = data['distortion_coefficients']['data']
+    info.K = data['camera_matrix']['data']
+    info.P = data['projection_matrix']['data']
+    info.R = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+    info_pub.publish(info)
 
 if __name__ == '__main__':
     rospy.init_node('publish_camera_info', anonymous=True)
     image_sub = rospy.Subscriber('image_raw_throttle', Image, callback)
-    image_pub = rospy.Publisher('image_rect_color_throttle', Image, queue_size=1)
+    info_pub = rospy.Publisher('camera_info', CameraInfo, queue_size=1)
     rospy.spin()
